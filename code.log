@@ -1,0 +1,152 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
+  Statistics/Data analysis            StataCorp
+                                      4905 Lakeway Drive
+                                      College Station, Texas 77845 USA
+                                      800-STATA-PC        https://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+Stata license: Single-user , expiring  6 Jul 2021
+Serial number: 301609606652
+  Licensed to: Ryan Granet
+               Michigan State University
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+
+. do C:\Users\ryang\.ipython\stata\code.do 
+
+. clear
+
+. set more off
+
+. set linesize 200
+
+. use "C:\Users\ryang\.ipython\stata\data_input.dta", clear 
+
+. log using "C:\Users\ryang\.ipython\stata\log_output.log", text replace
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\ryang\.ipython\stata\log_output.log
+  log type:  text
+ opened on:   8 Dec 2020, 16:08:20
+
+. 
+. 
+. # generate new variable
+Unknown #command
+. gen arrestperc = (arrests / murders)
+(15,919 missing values generated)
+
+. 
+. gen execrate2 = execrate * execrate
+
+. 
+. gen log_rpcpersinc = log(rpcpersinc)
+(3 missing values generated)
+
+. 
+. gen log_rpcunemins = log(rpcunemins)
+(7 missing values generated)
+
+. 
+. gen log_rpcincmaint = log(rpcincmaint)
+(3 missing values generated)
+
+. 
+. gen arrests2 = arrests * arrests
+(504 missing values generated)
+
+. 
+. gen log_arrestper = log(arrestperc)
+(18,870 missing values generated)
+
+. 
+. xtset countyid year
+       panel variable:  countyid (strongly balanced)
+        time variable:  year, 1980 to 1996
+                delta:  1 unit
+
+. xtreg murdrate execrate L.execrate L2.execrate L3.execrate L4.execrate density lpopul perc1019 perc2029 percblack percmale log_rpcpersinc log_rpcunemins log_rpcincmaint i.year, fe vce(cluster county
+> id)
+
+Fixed-effects (within) regression               Number of obs     =     28,554
+Group variable: countyid                        Number of groups  =      2,197
+
+R-sq:                                           Obs per group:
+     within  = 0.0057                                         min =          6
+     between = 0.0246                                         avg =       13.0
+     overall = 0.0086                                         max =         13
+
+                                                F(26,2196)        =       4.46
+corr(u_i, Xb)  = -0.9351                        Prob > F          =     0.0000
+
+                              (Std. Err. adjusted for 2,197 clusters in countyid)
+---------------------------------------------------------------------------------
+                |               Robust
+       murdrate |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+       execrate |
+            --. |  -.1017395   .1135045    -0.90   0.370     -.324327     .120848
+            L1. |  -.1947801   .0953977    -2.04   0.041    -.3818593   -.0077009
+            L2. |   .0254514   .1298707     0.20   0.845    -.2292308    .2801337
+            L3. |   .0290632   .1918137     0.15   0.880     -.347092    .4052184
+            L4. |  -.2524841   .1768158    -1.43   0.153    -.5992277    .0942596
+                |
+        density |  -.0006792   .0003905    -1.74   0.082     -.001445    .0000866
+         lpopul |  -.0104611   .1146147    -0.09   0.927    -.2352257    .2143035
+       perc1019 |    .025137   .0163524     1.54   0.124    -.0069307    .0572047
+       perc2029 |   .0507465   .0176096     2.88   0.004     .0162133    .0852798
+      percblack |    .063765    .015142     4.21   0.000     .0340709    .0934592
+       percmale |  -.0308156   .0116276    -2.65   0.008    -.0536178   -.0080133
+ log_rpcpersinc |   .0990561    .183807     0.54   0.590    -.2613976    .4595099
+ log_rpcunemins |   .0073475   .0205462     0.36   0.721    -.0329445    .0476395
+log_rpcincmaint |  -.0353148   .0511204    -0.69   0.490    -.1355643    .0649346
+                |
+           year |
+          1985  |    .051299   .0306836     1.67   0.095    -.0088729     .111471
+          1986  |   .0472392   .0270117     1.75   0.080    -.0057319    .1002102
+          1987  |    .087746   .0348046     2.52   0.012     .0194927    .1559994
+          1988  |   .1077015   .0522459     2.06   0.039      .005245     .210158
+          1989  |   .1127878   .0550659     2.05   0.041      .004801    .2207745
+          1990  |   .1808226   .0628958     2.87   0.004     .0574811    .3041641
+          1991  |   .1790419   .0693999     2.58   0.010     .0429455    .3151383
+          1992  |   .2012767   .0800521     2.51   0.012      .044291    .3582625
+          1993  |   .4298076   .1525488     2.82   0.005     .1306526    .7289627
+          1994  |   .4364639   .1714683     2.55   0.011     .1002068     .772721
+          1995  |   .3906208   .1634035     2.39   0.017     .0701792    .7110624
+          1996  |   .3888651   .1666166     2.33   0.020     .0621225    .7156078
+                |
+          _cons |    -.44919   2.006552    -0.22   0.823    -4.384128    3.485748
+----------------+----------------------------------------------------------------
+        sigma_u |  1.3587517
+        sigma_e |  .71430258
+            rho |  .78347449   (fraction of variance due to u_i)
+---------------------------------------------------------------------------------
+
+. lincom execrate + L1.execrate + L2.execrate + L3.execrate + L4.execrate
+
+ ( 1)  execrate + L.execrate + L2.execrate + L3.execrate + L4.execrate = 0
+
+------------------------------------------------------------------------------
+    murdrate |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   -.494489   .3192826    -1.55   0.122    -1.120617    .1316385
+------------------------------------------------------------------------------
+
+. 
+. log close
+      name:  <unnamed>
+       log:  C:\Users\ryang\.ipython\stata\log_output.log
+  log type:  text
+ closed on:   8 Dec 2020, 16:08:21
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+. 
+. // End of line deletion prevention
+. 
+end of do-file
